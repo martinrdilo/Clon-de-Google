@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="results.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <title>Buscador</title>
+</head>
+<body>
+
+  <div class="container">
+    <img class="logo" src="img/logo-google.png" alt="" srcset="">
+    <input type="text" name="" id="txtSearch">
+    <hr>
+    <div id="results">
+      <span class="total-results">Cerca de 367,000,000 resultados (0.22 segundos) 
+      </span>
+      <div id="links">
+        <div class="result">
+          <h3>ChatGPT</h3>
+          <span>ChatGPT is a free-to-use AI system. Use it for engaging conversations, gain insights, automate tasks, and witness the future of AI, all in one place.</span>
+        </div>
+      </div>
+    
+
+    </div>
+  </div>
+
+  <script>
+    let href = document.location.href.split('?query=');
+    let query = href[1];
+    document.getElementById("txtSearch").value = query;
+
+    fetch('http://localhost:8080/api/search?query=' + query)
+    .then(response => response.json())
+    .then(json => {
+      console.log(json)
+      let html = ''
+      for (let resultSearch of json) {
+        html += getHtmlResultSearch(resultSearch)
+      }
+      document.getElementById("links").outerHTML = html;
+    });
+    
+    function getHtmlResultSearch(resultSearch) {
+      return `<div class="result">
+        <h3><a href="${resultSearch.url}" target="_blank">${resultSearch.title}</a></h3>
+        <span>${resultSearch.description}</span>
+      </div>`;
+    }
+
+  </script>
+
+  
+</body>
+</html>
